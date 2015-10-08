@@ -11,4 +11,5 @@ ca:
 
     order_counts_for_last_n_days: "Número de comandes dels últims %{counts} dies"
     variant_name: "Variant"
+    product_name: "Producte"
     stock_items_count: "Stock"

@@ -11,4 +11,5 @@
 
     order_counts_for_last_n_days: "Número de pedidos de los últimos %{counts} días"
     variant_name: "Variante"
+    product_name: "Producto"
     stock_items_count: "Stock"
