@@ -8,5 +8,5 @@ it:
     thirty_days_order_count_description: ""
 
     order_counts_for_last_n_days: "Numero Ordini degli ultimi %{counts} giorni"
-    variant_name: Nome Variante
-    variant_sku: Sku Variante
+    variant_name: "Nome Variante"
+    variant_sku: "Sku Variante"

@@ -1,0 +1,61 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:stock_report) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <li>
+    <%= link_to_with_icon 'arrow-left', Spree.t(:back_to_reports_list), spree.admin_reports_url, class: 'button' %>
+  </li>
+<% end %>
+
+<div id="sales_total">
+  <table class="admin-report" data-hook="stock_report">
+    <thead>
+      <tr>
+        <th class="sort" data-sort="image">
+        </th>
+        <th class="sort" data-sort="name">
+          <%= Spree.t(:product_name) %>
+        </th>
+        <th class="sort" data-sort="variant_name">
+          <%= Spree.t(:variant_name) %>
+        </th>
+        <th class="sort" data-sort="sku">
+          <%= Spree.t(:sku) %>
+        </th>
+        <th class="sort" data-sort="price">
+          <%= Spree.t(:price) %>
+        </th>
+        <th class="sort" data-sort="quantity">
+          <%= Spree.t(:stock_items_count) %>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="list">
+      <% @variants.each do |row|
+          variant=Spree::Variant.find(row[:id])
+      %>
+        <tr class="align-center">
+          <td class="stock_image">
+            <%= mini_image(variant.product) %>
+          </td>
+          <td class="name">
+            <%= link_to "#{variant.product.name}", edit_admin_product_path(variant.product) %>
+          </td>
+          <td class="variant_name">
+            <%= link_to "#{variant.options_text}", edit_admin_product_variant_path(variant.product, variant.id) %>
+          </td>
+          <td class="sku">
+            <%= variant.sku %>
+          </td>
+          <td class="price">
+            <%= variant.display_price.to_html %>
+          </td>
+          <td class="quantity">
+            <%= variant.total_on_hand %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

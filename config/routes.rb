@@ -6,6 +6,8 @@ Spree::Core::Engine.routes.draw do
         post :total_sales_of_each_product
         get :ten_days_order_count
         get :thirty_days_order_count
+        get :stock_report
+        post :stock_report
       end
     end
   end

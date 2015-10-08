@@ -6,7 +6,10 @@ en:
     ten_days_order_count_description: ""
     thirty_days_order_count: "Order Counts for Last 30 Days"
     thirty_days_order_count_description: ""
+    stock_report: "Products Stock"
+    stock_report_description: ""		
 
     order_counts_for_last_n_days: "Order Counts for Last %{counts} Days"
-    variant_name: Variant Name
-    variant_sku: Variant SKU
+    variant_name: "Variant Name"
+    variant_sku: "Variant SKU"
+    stock_items_count: "Stock"

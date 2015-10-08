@@ -1,0 +1,14 @@
+ca:
+  spree:
+    total_sales_of_each_product: "Ventes Totals per Producte"
+    total_sales_of_each_product_description: ""
+    ten_days_order_count: "Número de comandes dels últims 10 dies"
+    ten_days_order_count_description: ""
+    thirty_days_order_count: "Número de comandes dels últims 30 dies"
+    thirty_days_order_count_description: ""
+    stock_report: "Stock per producte"
+    stock_report_description: ""
+
+    order_counts_for_last_n_days: "Número de comandes dels últims %{counts} dies"
+    variant_name: "Variant"
+    stock_items_count: "Stock"

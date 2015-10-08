@@ -7,6 +7,7 @@ module Spree
           ReportsController.add_available_report!(:total_sales_of_each_product)
           ReportsController.add_available_report!(:ten_days_order_count)
           ReportsController.add_available_report!(:thirty_days_order_count)
+          ReportsController.add_available_report!(:stock_report)
           super
         end
       end
@@ -32,6 +33,15 @@ module Spree
 
       def thirty_days_order_count
         @counts = n_day_order_count(30)
+      end
+
+      def stock_report
+        @variants=Variant.in_stock.includes(:stock_items,:product)
+                    .order("spree_stock_items.count_on_hand")
+        #.select("spree_variants.id, spree_products.slug as product_id, spree_products.name as name, spree_stock_items.count_on_hand")
+        if supports_store_id? && store_id
+          @variants = @variants.where("spree_orders.store_id" => store_id)
+        end
       end
 
       private
@@ -69,7 +79,6 @@ module Spree
           Date.parse(params[:completed_at_lt])
         end
       end
-
     end
   end
 end
