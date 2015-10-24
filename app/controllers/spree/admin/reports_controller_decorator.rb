@@ -36,12 +36,15 @@ module Spree
       end
 
       def stock_report
-        @variants=Variant.in_stock.includes(:stock_items,:product)
-                    .order("spree_stock_items.count_on_hand")
+        @search=Variant.eager_load(:stock_items,{product: [:translations]},:images,:prices,:option_values)
+                      .where(track_inventory: 1).ransack(params[:q])
+                      #.order("spree_stock_items.count_on_hand")
         #.select("spree_variants.id, spree_products.slug as product_id, spree_products.name as name, spree_stock_items.count_on_hand")
         if supports_store_id? && store_id
           @variants = @variants.where("spree_orders.store_id" => store_id)
         end
+        @variants = @search.result.page(params[:page]).per(params[:per_page] || 20)
+        #@variants = @variants.page(params[:page]).per(params[:per_page] || Spree::Config[:admin_products_per_page])
       end
 
       private

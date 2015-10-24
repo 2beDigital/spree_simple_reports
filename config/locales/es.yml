@@ -7,9 +7,10 @@
     thirty_days_order_count: "Número de pedidos de los últimos 30 días"
     thirty_days_order_count_description: ""
     stock_report: "Stock por producto"
-    stock_report_description: ""
+    stock_report_description: "Stock disponible para cada variante"
 
     order_counts_for_last_n_days: "Número de pedidos de los últimos %{counts} días"
     variant_name: "Variante"
     product_name: "Producto"
     stock_items_count: "Stock"
+    variant_sku: "SKU"		
