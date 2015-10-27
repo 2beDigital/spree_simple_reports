@@ -1,7 +1,7 @@
 module Spree
   module Admin
     ReportsController.class_eval do
-
+      respond_to :html, :csv
       module SimpleReport
         def initialize
           ReportsController.add_available_report!(:total_sales_of_each_product)
@@ -36,15 +36,18 @@ module Spree
       end
 
       def stock_report
-        @search=Variant.eager_load(:stock_items,{product: [:translations]},:images,:prices,:option_values)
-                      .where(track_inventory: 1).ransack(params[:q])
-                      #.order("spree_stock_items.count_on_hand")
+        @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]},:images,:option_values)
+                    .where(track_inventory: 1)
+                    .order("spree_stock_items.count_on_hand")
         #.select("spree_variants.id, spree_products.slug as product_id, spree_products.name as name, spree_stock_items.count_on_hand")
         if supports_store_id? && store_id
-          @variants = @variants.where("spree_orders.store_id" => store_id)
+          @variants_before_paginate = @variants_before_paginate.where("spree_orders.store_id" => store_id).order("spree_stock_items.count_on_hand")
         end
-        @variants = @search.result.page(params[:page]).per(params[:per_page] || 20)
-        #@variants = @variants.page(params[:page]).per(params[:per_page] || Spree::Config[:admin_products_per_page])
+        if @variants_before_paginate.empty?
+          flash[:notice] = Spree.t(:stock_report_empty)
+        end
+        @variants = @variants_before_paginate.page(params[:page]).per(params[:per_page] || 20)
+
       end
 
       private
