@@ -9,6 +9,7 @@ en:
     stock_report: "Products Stock"
     stock_report_description: "Available stock for every variant"		
     stock_report_empty: "No products with track inventory."
+    export_report_to_csv: "Export to CSV"
 
     order_counts_for_last_n_days: "Order Counts for Last %{counts} Days"
     variant_name: "Variant Name"
