@@ -36,12 +36,13 @@ module Spree
       end
 
       def stock_report
+        orderby="spree_stock_items.count_on_hand,spree_products.name,spree_variants.sku"
         @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]},:images,:option_values)
                     .where(track_inventory: 1)
-                    .order("spree_stock_items.count_on_hand")
+                    .order(orderby)
         #.select("spree_variants.id, spree_products.slug as product_id, spree_products.name as name, spree_stock_items.count_on_hand")
         if supports_store_id? && store_id
-          @variants_before_paginate = @variants_before_paginate.where("spree_orders.store_id" => store_id).order("spree_stock_items.count_on_hand")
+          @variants_before_paginate = @variants_before_paginate.where("spree_orders.store_id" => store_id).order(orderby)
         end
         if @variants_before_paginate.empty?
           flash[:notice] = Spree.t(:stock_report_empty)

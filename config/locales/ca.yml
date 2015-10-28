@@ -9,7 +9,6 @@ ca:
     stock_report: "Stock per producte"
     stock_report_description: "Stock disponible per a cada variant"
     stock_report_empty: "No hi ha cap producte amb seguiment de stock."
-    export_report_to_csv: "Exportar a CSV"
 
     order_counts_for_last_n_days: "Número de comandes dels últims %{counts} dies"
     variant_name: "Variant"

@@ -9,7 +9,6 @@
     stock_report: "Stock por producto"
     stock_report_description: "Stock disponible para cada variante"
     stock_report_empty: "No hay ningún producto con seguimiento de stock."
-    export_report_to_csv: "Exportar a CSV"
 
     order_counts_for_last_n_days: "Número de pedidos de los últimos %{counts} días"
     variant_name: "Variante"
