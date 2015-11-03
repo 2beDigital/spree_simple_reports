@@ -37,8 +37,8 @@ module Spree
 
       def stock_report
         orderby="spree_stock_items.count_on_hand,spree_products.name,spree_variants.sku"
-        @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]},:images,:option_values)
-                    .where(track_inventory: 1)
+        @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]},:option_values)
+                    .where(track_inventory: 1).where.not(spree_stock_items: {count_on_hand: nil}).where(spree_product_translations: {locale: I18n.locale})
                     .order(orderby)
         #.select("spree_variants.id, spree_products.slug as product_id, spree_products.name as name, spree_stock_items.count_on_hand")
         if supports_store_id? && store_id
@@ -48,7 +48,6 @@ module Spree
           flash[:notice] = Spree.t(:stock_report_empty)
         end
         @variants = @variants_before_paginate.page(params[:page]).per(params[:per_page] || 20)
-
       end
 
       private

@@ -26,7 +26,7 @@
         <th>
           <%= Spree.t(:price) %>
         </th>
-        <th class="sort" data-sort="quantity">
+        <th>
           <%= Spree.t(:stock_items_count) %>
         </th>
       </tr>
@@ -58,5 +58,5 @@
       <% end %>
     </tbody>
   </table>
+  <%= paginate @variants %>
 </div>
-<%= paginate @variants %>
