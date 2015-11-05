@@ -8,6 +8,8 @@ en:
     thirty_days_order_count_description: ""
     stock_report: "Products Stock"
     stock_report_description: "Available stock for every variant"		
+    stockout_report: "Stockout"
+    stockout_report_description: "Productos with 0 or negative stock."
     stock_report_empty: "No products with track inventory."
 
     order_counts_for_last_n_days: "Order Counts for Last %{counts} Days"

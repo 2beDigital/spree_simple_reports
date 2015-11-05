@@ -8,6 +8,8 @@ Spree::Core::Engine.routes.draw do
         get :thirty_days_order_count
         get :stock_report
         post :stock_report
+        get :stockout_report
+        post :stockout_report
       end
     end
   end

@@ -8,6 +8,8 @@ ca:
     thirty_days_order_count_description: ""
     stock_report: "Stock per producte"
     stock_report_description: "Stock disponible per a cada variant"
+    stockout_report: "Productes sense stock"
+    stockout_report_description: "Productes amb stock 0 o negatiu."
     stock_report_empty: "No hi ha cap producte amb seguiment de stock."
 
     order_counts_for_last_n_days: "Número de comandes dels últims %{counts} dies"

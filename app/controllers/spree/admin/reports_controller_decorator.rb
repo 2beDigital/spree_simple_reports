@@ -8,6 +8,7 @@ module Spree
           ReportsController.add_available_report!(:ten_days_order_count)
           ReportsController.add_available_report!(:thirty_days_order_count)
           ReportsController.add_available_report!(:stock_report)
+          ReportsController.add_available_report!(:stockout_report)
           super
         end
       end
@@ -37,10 +38,27 @@ module Spree
 
       def stock_report
         orderby="spree_stock_items.count_on_hand,spree_products.name,spree_variants.sku"
-        @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]},:option_values)
-                    .where(track_inventory: 1).where.not(spree_stock_items: {count_on_hand: nil}).where(spree_product_translations: {locale: I18n.locale})
-                    .order(orderby)
-        #.select("spree_variants.id, spree_products.slug as product_id, spree_products.name as name, spree_stock_items.count_on_hand")
+        @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]})
+          .select('spree_products.id,sum(spree_stock_items.count_on_hand) as stock,spree_variants.id')
+          .where(track_inventory: 1).where.not(spree_stock_items: {count_on_hand: nil})
+          .where(spree_product_translations: {locale: I18n.locale}).group('spree_variants.id')
+          .order(orderby)
+        @variants = stock_paginate
+      end
+
+      def stockout_report
+        orderby="sum(spree_stock_items.count_on_hand),spree_products.name,spree_variants.sku"
+        @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]})
+          .select('spree_products.id,sum(spree_stock_items.count_on_hand) as stock,spree_variants.id')
+          .where(track_inventory: 1).where.not(spree_stock_items: {count_on_hand: nil})
+          .where(spree_product_translations: {locale: I18n.locale}).group('spree_variants.id')
+          .having('sum(spree_stock_items.count_on_hand)<=0')
+          .order(orderby)
+        @variants = stock_paginate
+      end
+
+      private
+      def stock_paginate
         if supports_store_id? && store_id
           @variants_before_paginate = @variants_before_paginate.where("spree_orders.store_id" => store_id).order(orderby)
         end
@@ -49,9 +67,6 @@ module Spree
         end
         @variants = @variants_before_paginate.page(params[:page]).per(params[:per_page] || 20)
       end
-
-      private
-
       def n_day_order_count(n)
         counts = []
         n.times do |i|
