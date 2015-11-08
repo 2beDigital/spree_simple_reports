@@ -38,7 +38,7 @@ module Spree
 
       def stock_report
         orderby="spree_stock_items.count_on_hand,spree_products.name,spree_variants.sku"
-        @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]})
+        @variants_before_paginate=Variant.eager_load(:stock_items,:product)
           .select('spree_products.id,sum(spree_stock_items.count_on_hand) as stock,spree_variants.id')
           .where(track_inventory: 1).where.not(spree_stock_items: {count_on_hand: nil})
           .where(spree_product_translations: {locale: I18n.locale}).group('spree_variants.id')
@@ -48,7 +48,7 @@ module Spree
 
       def stockout_report
         orderby="sum(spree_stock_items.count_on_hand),spree_products.name,spree_variants.sku"
-        @variants_before_paginate=Variant.eager_load(:stock_items,{product: [:translations]})
+        @variants_before_paginate=Variant.eager_load(:stock_items,:product)
           .select('spree_products.id,sum(spree_stock_items.count_on_hand) as stock,spree_variants.id')
           .where(track_inventory: 1).where.not(spree_stock_items: {count_on_hand: nil})
           .where(spree_product_translations: {locale: I18n.locale}).group('spree_variants.id')
