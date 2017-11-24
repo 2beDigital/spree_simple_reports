@@ -1,0 +1,99 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:reimbursement_total) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <li><%= link_to_with_icon 'arrow-left', Spree.t(:back_to_reports_list), spree.admin_reports_url, :class => 'button' %></li>
+<% end %>
+
+
+<% content_for :table_filter_title do %>
+  <%= Spree.t(:date_range) %>
+<% end %>
+
+<% content_for :table_filter do %>
+  <%= form_tag spree.reimbursement_total_admin_reports_path, url:  spree.reimbursement_total_admin_reports_path, id: 'reimbursement_total'  do |s| %>
+    <div class="date-range-filter field align-center">
+      <%= label_tag :created_at, Spree.t(:start), :class => 'inline' %>
+      <%= text_field_tag :created_at_gt, datepicker_field_value(params[:created_at_gt]), :class => 'datepicker datepicker-from'  %>
+          
+      <span class="range-divider">
+        <i class="fa fa-arrow-right"></i>
+      </span>
+
+      <%= text_field_tag  :created_at_lt, datepicker_field_value(params[:created_at_lt]), :class => 'datepicker datepicker-to' %>
+      <%= label_tag :created_at_lt, Spree.t(:end), :class => 'inline' %>
+    </div>
+
+    <div class="actions filter-actions">
+      <%= button Spree.t(:search), 'search'  %>
+    </div>
+  <% end %>
+<% end %>
+
+<table class="admin-report" data-hook="reimbursement_total">
+  <thead>
+    <tr>
+      <th><%= Spree.t(:currency) %></th>
+      <th><%= Spree.t(:reimbursement_total) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @totals.each do |key, row| %>
+      <tr class="align-center">
+        <td><%= key %></td>
+        <td>- <%= row[:reimbursement_total].format if row[:reimbursement_total].present? %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div id="reimbursement_total_return_items">
+  <table class="admin-report" data-hook="reimbursement_total_return_items">
+    <thead>
+      <tr>
+        <th class="sort" data-sort="order">
+          <%= Spree.t(:order) %>
+        </th>
+        <th class="sort" data-sort="name">
+          <%= Spree.t(:variant_name) %>
+        </th>
+        <th class="sort" data-sort="sku">
+          <%= Spree.t(:variant_sku) %>
+        </th>
+        <th class="sort" data-sort="slug">
+          <%= Spree.t(:variant_slug) %>
+        </th>
+        <th class="sort" data-sort="sales">
+          <%= Spree.t(:reimbursement_total) %>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="list">
+
+      <% @reimbursements.each do |reimbursement| %>
+        <% reimbursement.return_items.each do |return_item| %>
+          <% if return_item.total > 0 %>
+            <tr class="align-center">
+              <td class="order">
+                <%= link_to "#{reimbursement.order.number}", edit_admin_order_path(reimbursement.order) %>
+              </td>
+              <td class="name">
+                <%= link_to "#{return_item.variant.product.name}", edit_admin_product_variant_path(return_item.variant.slug, return_item.variant.id) %>
+              </td>
+              <td class="sku">
+                <%= return_item.variant.sku %>
+              </td>
+              <td class="slug">
+                <%= return_item.variant.slug %>
+              </td>
+              <td class="sales">
+                - <%= return_item.total.to_money %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>

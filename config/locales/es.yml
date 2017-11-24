@@ -1,19 +1,24 @@
 ﻿es:
   spree:
-    total_sales_of_each_product: "Ventas Totales por Producto"
-    total_sales_of_each_product_description: ""
-    ten_days_order_count: "Número de pedidos de los últimos 10 días"
-    ten_days_order_count_description: ""
-    thirty_days_order_count: "Número de pedidos de los últimos 30 días"
-    thirty_days_order_count_description: ""
+    total_sales_of_each_variant: "Ventas totales por variantes"
+    total_sales_of_each_variant_description: "Suma de todas las ventas totales por cada variante del producto."
+    ten_days_order_count: "Pedidos últimos 10 días"
+    ten_days_order_count_description: "Número de pedidos de cada día de los últimos 10 días"
+    thirty_days_order_count: "Pedidos últimos 30 días"
+    thirty_days_order_count_description: "Número de pedidos de cada día en los últimos 30 días"
     stock_report: "Stock por producto"
     stock_report_description: "Stock disponible para cada variante"
     stockout_report: "Productos sin stock"
     stockout_report_description: "Productos con stock 0 o negativo."
     stock_report_empty: "No hay ningún producto con seguimiento de stock."
-
     order_counts_for_last_n_days: "Número de pedidos de los últimos %{counts} días"
     variant_name: "Variante"
     product_name: "Producto"
     stock_items_count: "Stock"
-    variant_sku: "SKU"		
+    variant_sku: "SKU"	
+    sales_total_net: "Ventas totales netas"    
+    sales_total_net_description: "Total de ventas netas de todos los pedidos."
+    total_sales_by_product: 'Ventas totales por producto.'
+    total_sales_by_product_description: 'Suma de todas las ventas totales de cada producto.'
+    reimbursement_total: 'Total de devoluciones'
+    reimbursement_total_description: 'Suma de todas las devoluciones realizadas'

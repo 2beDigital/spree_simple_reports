@@ -1,7 +1,7 @@
 ca:
   spree:
-    total_sales_of_each_product: "Ventes Totals per Producte"
-    total_sales_of_each_product_description: ""
+    total_sales_of_each_variant: "Ventes Totals per Producte"
+    total_sales_of_each_variant_description: ""
     ten_days_order_count: "Número de comandes dels últims 10 dies"
     ten_days_order_count_description: ""
     thirty_days_order_count: "Número de comandes dels últims 30 dies"

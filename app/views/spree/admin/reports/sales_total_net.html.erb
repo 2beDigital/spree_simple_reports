@@ -1,0 +1,55 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:sales_total_net) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <li><%= link_to_with_icon 'arrow-left', Spree.t(:back_to_reports_list), spree.admin_reports_url, :class => 'button' %></li>
+<% end %>
+
+
+<% content_for :table_filter_title do %>
+  <%= Spree.t(:date_range) %>
+<% end %>
+
+<% content_for :table_filter do %>
+  <%= search_form_for @search, :url => spree.sales_total_net_admin_reports_path  do |s| %>
+    <div class="date-range-filter field align-center">
+      <%= label_tag :q_completed_at, Spree.t(:start), :class => 'inline' %>
+      <%= s.text_field :completed_at_gt, :class => 'datepicker datepicker-from', :value => datepicker_field_value(params[:q][:completed_at_gt]) %>
+          
+      <span class="range-divider">
+        <i class="fa fa-arrow-right"></i>
+      </span>
+
+      <%= s.text_field :completed_at_lt, :class => 'datepicker datepicker-to', :value => datepicker_field_value(params[:q][:completed_at_lt]) %>
+      <%= label_tag :q_completed_at_lt, Spree.t(:end), :class => 'inline' %>
+    </div>
+
+    <div class="actions filter-actions">
+      <%= button Spree.t(:search), 'search'  %>
+    </div>
+  <% end %>
+<% end %>
+
+<table class="admin-report" data-hook="sales_total_net">
+  <thead>
+    <tr>
+      <th><%= Spree.t(:currency) %></th>
+      <th><%= Spree.t(:item_total) %></th>
+      <th><%= Spree.t(:adjustment_total) %></th>
+      <th><%= Spree.t(:reimbursement_total) %></th>
+      <th><%= Spree.t(:sales_total_net) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @totals.each do |key, row| %>
+      <tr class="align-center">
+        <td><%= key %></td>
+        <td><%= row[:item_total].format %></td>
+        <td><%= row[:adjustment_total].format %></td>
+        <td><%= row[:reimbursement_total].format if row[:reimbursement_total].present? %></td>
+        <td><%= row[:sales_total_net].present? ? row[:sales_total_net].format : row[:sales_total].format %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
