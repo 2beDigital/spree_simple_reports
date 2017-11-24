@@ -13,7 +13,7 @@
 <% end %>
 
 <% content_for :table_filter do %>
-  <%= form_tag spree.total_sales_of_each_product_admin_reports_path do %>
+  <%= form_tag spree.total_sales_of_each_variant_admin_reports_path do %>
     <% if supports_store_id? %>
       <div class="select-filter field align-center">
         <%= label_tag nil, Spree.t(:store), class: 'inline' %>
