@@ -23,11 +23,15 @@ module Spree
 
       def total_sales_of_each_variant
         @variants = Variant.joins(:product, line_items: :order)
-                    .select("spree_variants.id, spree_products.slug as productId, spree_products.name as name, sku, SUM(spree_line_items.quantity) as quantity, SUM((spree_line_items.price * spree_line_items.quantity) + spree_line_items.adjustment_total) as total_price")
+                    .select("spree_variants.id, spree_products.id as product_id, spree_products.slug as productId, spree_products.name as name, sku, SUM(spree_line_items.quantity) as quantity, SUM((spree_line_items.price * spree_line_items.quantity) + spree_line_items.adjustment_total) as total_price")
                     .merge(Order.complete.completed_between(completed_at_gt, completed_at_lt))
                     .group("spree_variants.id, spree_products.id, spree_products.name")
         if supports_store_id? && store_id
           @variants = @variants.where("spree_orders.store_id" => store_id)
+        end
+        if params[:to_csv] 
+          file = to_csv(@variants) 
+          send_data(file, :type=>"text/csv",:filename => "total_sales_of_each_variant_#{Time.now}.csv")
         end
       end
 
@@ -39,6 +43,21 @@ module Spree
                     .uniq
         if supports_store_id? && store_id
           @products = @products.where("spree_orders.store_id" => store_id)
+        end
+        if params[:to_csv] 
+          file = to_csv(@products) 
+          send_data(file, :type=>"text/csv",:filename => "total_sales_by_product_#{Time.now}.csv")
+        end
+      end
+
+      def to_csv(products)
+        headers = [Spree.t(:product_name),Spree.t(:sku),'slug',Spree.t(:quantity),Spree.t(:sales_total)]
+        Encoding.default_external = "UTF-8"
+        file = CSV.generate do |csv|
+          csv << headers
+          products.each do |product|
+            csv << [product.respond_to?('options_text') ? product.name + ' ' + product.options_text : product.name,product.sku,product.slug,product.quantity,product.total_price]
+          end
         end
       end
 
@@ -58,6 +77,10 @@ module Spree
           .group('spree_variants.id')
           .order(orderby)
         @variants = stock_paginate
+        if params[:name] 
+          file = stock_report_csv 
+          send_data(file, :type=>"text/csv",:filename => "stock_report_#{Time.now}.csv")
+        end
       end
 
       def stockout_report
@@ -69,12 +92,29 @@ module Spree
           .having('sum(spree_stock_items.count_on_hand)<=0')
           .order(orderby)
         @variants = stock_paginate
+        if params[:name] 
+          file = stock_report_csv 
+          send_data(file, :type=>"text/csv",:filename => "stockout_report_#{Time.now}.csv")
+        end
+      end
+
+      def stock_report_csv
+        headers = [Spree.t(:product_name),Spree.t(:variant_name),Spree.t(:sku),Spree.t(:price),Spree.t(:stock_items_count)]
+        Encoding.default_external = "UTF-8"
+        file = CSV.generate do |csv|
+          csv << headers
+          @variants_before_paginate.each do |variant|
+            csv << [variant.product.name,variant.options_text,variant.sku,variant.display_price,variant.total_on_hand]
+          end
+        end
       end
 
       def sales_total_net
         sales_total
+        @totals = {} unless @totals
         @reimbursements = Reimbursement.where('created_at between ? and ?', params[:q][:completed_at_gt], params[:q][:completed_at_lt].present? ? params[:q][:completed_at_lt] : Time.now) 
         @reimbursements.each do |reimbursement|
+          @totals[reimbursement.order.currency] = { :item_total => ::Money.new(0, reimbursement.order.currency), :adjustment_total => ::Money.new(0, reimbursement.order.currency), :sales_total => ::Money.new(0, reimbursement.order.currency) } unless @totals[reimbursement.order.currency]
           @totals[reimbursement.order.currency][:reimbursement_total] = ::Money.new(0, reimbursement.order.currency) unless @totals[reimbursement.order.currency][:reimbursement_total]
           @totals[reimbursement.order.currency][:sales_total_net] = ::Money.new(0, reimbursement.order.currency) unless @totals[reimbursement.order.currency][:sales_total_net]
           @totals[reimbursement.order.currency][:reimbursement_total] += reimbursement.total.to_money(reimbursement.order.currency)

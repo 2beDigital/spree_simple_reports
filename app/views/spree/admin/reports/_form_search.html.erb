@@ -1,0 +1,22 @@
+<%= form_tag url do %>
+  <% if supports_store_id? %>
+    <div class="select-filter field align-center">
+      <%= label_tag nil, Spree.t(:store), class: 'inline' %>
+      <%= select_tag :store_id, options_from_collection_for_select(Spree::Store.all, "id", "name", params[:store_id]), prompt: 'All' %>
+    </div>
+  <% end %>
+  <div class="date-range-filter field align-center">
+    <%= label_tag nil, Spree.t(:start), class: 'inline' %>
+    <%= text_field_tag :completed_at_gt, datepicker_field_value(params[:completed_at_gt]), class: 'datepicker datepicker-from' %>
+    <span class="range-divider">
+      <i class="fa fa-arrow-right"></i>
+      <%= text_field_tag :completed_at_lt, datepicker_field_value(params[:completed_at_lt]), class: 'datepicker datepicker-to' %>
+      <%= label_tag nil, Spree.t(:end), class: 'inline' %>
+    </span>
+  </div>
+  <div class="actions filter-actions">
+    <%= submit_tag Spree.t(:search) %>
+    <span class="or"><%= Spree.t(:or) %></span>
+    <%= submit_tag t(:export_to_csv), name: 'to_csv' %>
+  </div>
+<% end %>

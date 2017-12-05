@@ -1,9 +1,5 @@
-<% content_for :page_title do %>
-  <%= Spree.t(:stock_report) %>
-<% end %>
-
 <% content_for :page_actions do %>
-  <li><%= button_link_to t(:export_to_csv), link_report, :icon => 'file' %></li>
+  <li><%= button_link_to t(:export_to_csv), url, :icon => 'file' %></li>
   <li>
     <%= link_to_with_icon 'arrow-left', Spree.t(:back_to_reports_list), spree.admin_reports_url, class: 'button' %>
   </li>
@@ -32,9 +28,7 @@
       </tr>
     </thead>
     <tbody class="list">
-      <% @variants.each do |variant|
-          #variant=Spree::Variant.find(row[:id])
-      %>
+      <% @variants.each do |variant| %>
         <tr class="align-center">
           <td class="stock_image">
             <%= mini_image(variant) %>

@@ -1,0 +1,46 @@
+  <table class="admin-report" data-hook="sales_total">
+    <thead>
+      <tr>
+        <th class="sort" data-sort="name">
+          <%= Spree.t(:product_name) %>
+        </th>
+        <th class="sort" data-sort="sku">
+          <%= Spree.t(:sku) %>
+        </th>
+        <th class="sort" data-sort="slug">
+          <%= Spree.t(:slug) %>
+        </th>
+        <th class="sort asc" data-sort="quantity">
+          <%= Spree.t(:quantity) %>
+        </th>
+        <th class="sort" data-sort="sales">
+          <%= Spree.t(:sales_total) %>
+        </th>
+      </tr>
+    </thead>
+    <tbody class="list">
+      <% products.each do |product| %>
+        <tr class="align-center">
+          <td class="name">
+            <% if product.respond_to?('options_text') %>
+              <%= link_to "#{product.name} #{product.options_text}", edit_admin_product_variant_path(product[:productId], product[:id]) %>
+            <% else %>
+              <%= link_to "#{product.name}", edit_admin_product_path(product) %>
+            <% end %>
+          </td>
+          <td class="sku">
+            <%= product.sku %>
+          </td>
+          <td class="slug">
+            <%= product.slug %>
+          </td>
+          <td class="quantity">
+            <%= product[:quantity] %>
+          </td>
+          <td class="sales">
+            <%= product[:total_price] %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
